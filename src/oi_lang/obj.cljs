@@ -1,7 +1,8 @@
 (ns oi-lang.obj
   (:require [instaparse.core :as insta :refer-macros [defparser]]
             [cljs.core.match :refer-macros [match]]
-            [cljs.test :as test :refer [is] :refer-macros [deftest]]))
+            [cljs.test :as test :refer [is] :refer-macros [deftest]]
+            [clojure.string :as string]))
 
 (defparser oi-program
   "<start> = (terminator | exp)*
@@ -104,6 +105,14 @@
 
 (defn eval* [exprs]
   (map eval exprs))
+
+(defn pretty [expr]
+  (match expr
+    {:type :number :value value} value
+    {:type :boolean :value value} value))
+
+(defn pretty* [exprs]
+  (string/join "\n" (map pretty exprs)))
 
 (deftest eval-tests
   (is (oi-= (eval* (parse "42")) [(oi-number 42)]))
