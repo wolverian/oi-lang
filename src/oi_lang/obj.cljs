@@ -3,12 +3,11 @@
             [cljs.test :as test :refer [is] :refer-macros [deftest]]))
 
 (defparser oi-program
-  "start = '' | exp
+  "start = (terminator | exp)*
    <exp> = literal / send / message
    <literal> = number / string
 
-   number = digit+
-   <digit> = '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'
+   number = #'[0-9]+'
 
    string = <'\"'> str-char* <'\"'>
    <str-char> = #'[^\"]'
@@ -20,6 +19,8 @@
    arglist = '' | exp | arglist <' '*> <','> <' '*> exp
 
    send = exp <' '+> message
+
+   terminator = '\n' | ';'
    ")
 
 (defn reduce-arglist [& params]
@@ -32,7 +33,7 @@
 
 (defn parse [source]
   (insta/transform
-    {:number  (fn [& digits] [:number (int (apply str digits))])
+    {:number  (fn [number] [:number (int number)])
      :string  (fn [& chars] [:string (apply str chars)])
      :arglist reduce-arglist
      }
