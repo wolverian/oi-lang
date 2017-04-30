@@ -2,4 +2,8 @@
 body,
 textarea
 { font-size: 18px; font-family: -system, sans-serif; }
+textarea {
+  width: 100%;
+  min-height: 200px;
+}
 
