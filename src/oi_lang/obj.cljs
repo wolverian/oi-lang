@@ -4,7 +4,7 @@
 
 (defparser oi-program
   "start = '' | exp
-   <exp> = literal / message / send
+   <exp> = literal / send / message
    <literal> = number / string
 
    number = digit+
@@ -45,4 +45,5 @@
   (is (= (parse "bar()") [:start [:message "bar" [:arglist]]]))
   (is (= (parse "bar(1)") [:start [:message "bar" [:arglist [:number 1]]]]))
   (is (= (parse "bar(1, 2)") [:start [:message "bar" [:arglist [:number 1] [:number 2]]]]))
-  (is (= (parse "bar(1, 2, 3)") [:start [:message "bar" [:arglist [:number 1] [:number 2] [:number 3]]]])))
+  (is (= (parse "bar(1, 2, 3)") [:start [:message "bar" [:arglist [:number 1] [:number 2] [:number 3]]]]))
+  (is (= (parse "foo bar") [:start [:send [:message "foo"] [:message "bar"]]])))
