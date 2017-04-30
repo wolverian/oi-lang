@@ -4,7 +4,7 @@
 
 (defparser oi-program
   "start = '' | exp
-   <exp> = literal / message
+   <exp> = literal / message / send
    <literal> = number / string
 
    number = digit+
@@ -18,6 +18,8 @@
    message = identifier <' '*> <'('> <' '*> arglist <' '*> <')'>
            | identifier
    arglist = '' | exp | arglist <' '*> <','> <' '*> exp
+
+   send = exp <' '+> message
    ")
 
 (defn reduce-arglist [& params]
