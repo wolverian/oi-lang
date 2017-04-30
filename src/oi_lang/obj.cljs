@@ -17,7 +17,13 @@
 
    message = identifier <' '*> <'('> <' '*> arglist <' '*> <')'>
            | identifier
+           | op-message
+
+   op-message = operator <' '*> exp
+
    arglist = '' | exp | arglist <' '*> <','> <' '*> exp
+
+   <operator> = #'[<>+*=-]'
 
    send = exp <' '+> message
 
@@ -36,7 +42,13 @@
   (insta/transform
     {:number  (fn [number] [:number (int number)])
      :string  (fn [& chars] [:string (apply str chars)])
-     :arglist reduce-arglist}
+     :arglist reduce-arglist
+     :message (fn [& args]
+                ;(println (first (first args)))
+                (if (and (= 1 (count args)) (= (first (first args)) :op-message))
+                  (let [[_ op & args] (first args)]
+                    [:message op (vec (cons :arglist args))])
+                  (vec (cons :message args))))}
     (oi-program source)))
 
 (deftest simple-parses
@@ -47,10 +59,14 @@
   (is (= (parse "bar(1)") [[:message "bar" [:arglist [:number 1]]]]))
   (is (= (parse "bar(1, 2)") [[:message "bar" [:arglist [:number 1] [:number 2]]]]))
   (is (= (parse "bar(1, 2, 3)") [[:message "bar" [:arglist [:number 1] [:number 2] [:number 3]]]]))
-  (is (= (parse "foo bar") [[:send [:message "foo"] [:message "bar"]]])))
+  (is (= (parse "foo bar") [[:send [:message "foo"] [:message "bar"]]]))
+  (is (= (parse "foo < bar") [[:send [:message "foo"] [:message "<" [:arglist [:message "bar"]]]]])))
 
 (defn eval [expr]
   expr)
 
 (defn eval* [exprs]
   (map eval exprs))
+
+(deftest eval-tests
+  (is (= (eval "42") "42")))
