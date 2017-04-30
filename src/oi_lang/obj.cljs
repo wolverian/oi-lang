@@ -18,7 +18,6 @@
 
    message = identifier <' '*> <'('> <' '*> arglist <' '*> <')'>
            | identifier
-           | op-message
 
    op-message = operator <' '*> exp
 
@@ -27,6 +26,7 @@
    <operator> = #'[<>+*=-]'
 
    send = exp <' '+> message
+        | exp <' '*> op-message
 
    <terminator> = <'\n'> | <';'>
    ")
@@ -41,14 +41,11 @@
 
 (defn parse [source]
   (insta/transform
-    {:number  (fn [number] [:number (int number)])
-     :string  (fn [& chars] [:string (apply str chars)])
-     :arglist reduce-arglist
-     :message (fn [& args]
-                (if (and (= 1 (count args)) (= (first (first args)) :op-message))
-                  (let [[_ op & args] (first args)]
-                    [:message op (vec (cons :arglist args))])
-                  (vec (cons :message args))))}
+    {:number     (fn [number] [:number (int number)])
+     :string     (fn [& chars] [:string (apply str chars)])
+     :arglist    reduce-arglist
+     :op-message (fn [op exp]
+                   [:message op [:arglist exp]])}
     (oi-program source)))
 
 (deftest simple-parses
@@ -76,12 +73,12 @@
 
 (def initial (oi-object))
 
-(def oi-false {:type :boolean
+(def oi-false {:type  :boolean
                :value false
                :slots []
                :proto initial})
 
-(def oi-true {:type :boolean
+(def oi-true {:type  :boolean
               :value true
               :slots []
               :proto initial})
@@ -90,7 +87,7 @@
   (if truthy oi-true oi-false))
 
 (defn oi-number [n]
-  {:type :number
+  {:type  :number
    :value n
    :slots {"<" (fn [{:keys [value]}]
                  (oi-boolean (< n value)))}
@@ -117,4 +114,6 @@
 (deftest eval-tests
   (is (oi-= (eval* (parse "42")) [(oi-number 42)]))
   (is (oi-= (eval* (parse "42 < 22")) [oi-false]))
+  (is (oi-= (eval* (parse "2<1")) [oi-false]))
+  (is (oi-= (eval* (parse "1<2")) [oi-true]))
   (is (oi-= (eval* (parse "42 > 22")) [oi-true])))

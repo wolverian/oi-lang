@@ -1,11 +1,17 @@
 * { box-sizing: border-box; }
+html, body, #app { height: 100%; margin: 0; padding: 0 }
+#app {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: stretch;
+}
 body,
 textarea
 { font-size: 18px; font-family: -system, sans-serif; }
 textarea {
-  width: 100%;
-  min-height: 200px;
   font-family: 'Fira Code', monospace;
+  flex-grow: 2;
 }
 #code {
 }
