@@ -1,9 +1,10 @@
 (ns oi-lang.obj
   (:require [instaparse.core :as insta :refer-macros [defparser]]
+            [cljs.core.match :refer-macros [match]]
             [cljs.test :as test :refer [is] :refer-macros [deftest]]))
 
 (defparser oi-program
-  "start = (terminator | exp)*
+  "<start> = (terminator | exp)*
    <exp> = literal / send / message
    <literal> = number / string
 
@@ -20,7 +21,7 @@
 
    send = exp <' '+> message
 
-   terminator = '\n' | ';'
+   <terminator> = <'\n'> | <';'>
    ")
 
 (defn reduce-arglist [& params]
@@ -35,16 +36,21 @@
   (insta/transform
     {:number  (fn [number] [:number (int number)])
      :string  (fn [& chars] [:string (apply str chars)])
-     :arglist reduce-arglist
-     }
+     :arglist reduce-arglist}
     (oi-program source)))
 
 (deftest simple-parses
-  (is (= (parse "42") [:start [:number 42]]))
-  (is (= (parse "\"foo\"") [:start [:string "foo"]]))
-  (is (= (parse "foo") [:start [:message "foo"]]))
-  (is (= (parse "bar()") [:start [:message "bar" [:arglist]]]))
-  (is (= (parse "bar(1)") [:start [:message "bar" [:arglist [:number 1]]]]))
-  (is (= (parse "bar(1, 2)") [:start [:message "bar" [:arglist [:number 1] [:number 2]]]]))
-  (is (= (parse "bar(1, 2, 3)") [:start [:message "bar" [:arglist [:number 1] [:number 2] [:number 3]]]]))
-  (is (= (parse "foo bar") [:start [:send [:message "foo"] [:message "bar"]]])))
+  (is (= (parse "42") [[:number 42]]))
+  (is (= (parse "\"foo\"") [[:string "foo"]]))
+  (is (= (parse "bar") [[:message "bar"]]))
+  (is (= (parse "bar()") [[:message "bar" [:arglist]]]))
+  (is (= (parse "bar(1)") [[:message "bar" [:arglist [:number 1]]]]))
+  (is (= (parse "bar(1, 2)") [[:message "bar" [:arglist [:number 1] [:number 2]]]]))
+  (is (= (parse "bar(1, 2, 3)") [[:message "bar" [:arglist [:number 1] [:number 2] [:number 3]]]]))
+  (is (= (parse "foo bar") [[:send [:message "foo"] [:message "bar"]]])))
+
+(defn eval [expr]
+  expr)
+
+(defn eval* [exprs]
+  (map eval exprs))

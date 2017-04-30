@@ -10,6 +10,7 @@
                  [org.clojure/clojurescript "1.9.521"]
                  [org.clojure/core.async "0.3.442"
                   :exclusions [org.clojure/tools.reader]]
+                 [org.clojure/core.match "0.3.0-alpha4"]
                  [instaparse "1.4.5"]]
 
   :plugins [[lein-figwheel "0.5.10"]

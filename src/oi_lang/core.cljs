@@ -6,8 +6,11 @@
 (defn run [evt]
   (let [code (-> js/document (.getElementById "code") .-value)
         parse-tree (obj/parse code)
-        parse-tree-output (-> js/document (.getElementById "parse-tree"))]
-    (set! (.-innerText parse-tree-output) parse-tree)))
+        parse-tree-output (-> js/document (.getElementById "parse-tree"))
+        runtime-representation (obj/eval* parse-tree)
+        runtime-representation-output (-> js/document (.getElementById "runtime-representation"))]
+    (set! (.-value parse-tree-output) parse-tree)
+    (set! (.-value runtime-representation-output) runtime-representation)))
 
 (-> js/document
     (.getElementById "compile")
