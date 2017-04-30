@@ -3,5 +3,5 @@
 
 (enable-console-print!)
 
-(println (obj/oi-program "1"))
+(println (obj/parse "1"))
 
