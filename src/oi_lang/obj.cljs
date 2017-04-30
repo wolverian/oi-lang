@@ -67,5 +67,8 @@
 (defn eval* [exprs]
   (map eval exprs))
 
+(def oi-false [:false])
+
 (deftest eval-tests
-  (is (= (eval "42") "42")))
+  (is (= (eval "42") "42"))
+  (is (= (eval "42 < 22") oi-false)))
