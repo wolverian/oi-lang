@@ -1,2 +1,5 @@
-/* some style */
+* { box-sizing: border-box; }
+body,
+textarea
+{ font-size: 18px; font-family: -system, sans-serif; }
 
