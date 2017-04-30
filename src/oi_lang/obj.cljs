@@ -44,7 +44,6 @@
      :string  (fn [& chars] [:string (apply str chars)])
      :arglist reduce-arglist
      :message (fn [& args]
-                ;(println (first (first args)))
                 (if (and (= 1 (count args)) (= (first (first args)) :op-message))
                   (let [[_ op & args] (first args)]
                     [:message op (vec (cons :arglist args))])
