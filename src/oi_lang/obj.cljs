@@ -64,7 +64,7 @@
 (defn activate [value args]
   (if (fn? value)
     (apply value args)
-    (throw "unsupported activation")))
+    (throw (str "unsupported activation: " (or value "nil") " " (or args "nil")))))
 
 (defn oi-= [a b]
   (and (= (:type a) (:type b))
@@ -75,25 +75,37 @@
 
 (def initial (oi-object))
 
-(defn oi-number [n]
-  {:type :number
-   :value n
-   :slots {"<" (fn [o] (< n o))}
-   :proto initial})
-
-(defn eval [expr]
-  (match expr
-    [:number n] (oi-number n)
-    [:send target [:message name args]] (activate (-> target :slots name) (map eval args))))
-
-(defn eval* [exprs]
-  (map eval exprs))
-
 (def oi-false {:type :boolean
                :value false
                :slots []
                :proto initial})
 
+(def oi-true {:type :boolean
+              :value true
+              :slots []
+              :proto initial})
+
+(defn oi-boolean [truthy]
+  (if truthy oi-true oi-false))
+
+(defn oi-number [n]
+  {:type :number
+   :value n
+   :slots {"<" (fn [{:keys [value]}]
+                 (oi-boolean (< n value)))}
+   :proto initial})
+
+(defn eval [expr]
+  (match expr
+    [:number n]
+    (oi-number n)
+    [:send target [:message name [:arglist & args]]]
+    (activate (-> (eval target) :slots (get name)) (map eval args))))
+
+(defn eval* [exprs]
+  (map eval exprs))
+
 (deftest eval-tests
   (is (oi-= (eval* (parse "42")) [(oi-number 42)]))
-  (is (oi-= (eval* (parse "42 < 22")) [oi-false])))
+  (is (oi-= (eval* (parse "42 < 22")) [oi-false]))
+  (is (oi-= (eval* (parse "42 > 22")) [oi-true])))
