@@ -8,7 +8,7 @@
         parse-tree (obj/parse code)
         parse-tree-output (-> js/document (.getElementById "parse-tree"))
         _ (set! (.-value parse-tree-output) parse-tree)
-        runtime-representation (obj/eval* parse-tree)
+        runtime-representation (obj/ast->runtime* parse-tree)
         runtime-representation-output (-> js/document (.getElementById "runtime-representation"))
         _ (set! (.-value runtime-representation-output) runtime-representation)
         pretty-representation (obj/pretty* runtime-representation)
