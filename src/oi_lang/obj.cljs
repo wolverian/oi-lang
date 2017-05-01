@@ -161,11 +161,11 @@
   (map ast->runtime asts))
 
 (defn eval [env expr]
-  (println "(eval" expr ")")
   (match expr
     {:type :number :value n} {:env env :result n}
     {:type :string :value s} {:env env :result (str \" s \")}
-    {:type :boolean :value b} {:env env :result b}))
+    {:type :boolean :value b} {:env env :result b}
+    {:type :send :slots {:target target :message message}}))
 
 (defn eval*
   ([env exprs] (:result (reduce eval {:env env :result nil} exprs)))
@@ -183,13 +183,16 @@
 (defn pretty* [exprs]
   (string/join "\n" (map pretty exprs)))
 
-(deftest simple-eval-tests
+(deftest simple-ast->runtime*-tests
   (is (oi-= (ast->runtime* (parse "42")) [(oi-number 42)]))
   (is (oi-= (ast->runtime* (parse "42 < 22")) [oi-false]))
   (is (oi-= (ast->runtime* (parse "2<1")) [oi-false]))
   (is (oi-= (ast->runtime* (parse "1<2")) [oi-true]))
   (is (oi-= (ast->runtime* (parse "42 > 22")) [oi-true])))
 
-(deftest list-eval-tests
+(deftest list-ast->runtime*-tests
   (is (oi-= (ast->runtime* (parse "list(1, 2, 3)")) [(oi-list (oi-number 1) (oi-number 2) (oi-number 3))]))
   (is (oi-= (ast->runtime* (parse "x := list(1, 2, 3); x")) [(oi-list (oi-number 1) (oi-number 2) (oi-number 3))])))
+
+(deftest simple-eval-tests
+  (is (oi-= (eval* (ast->runtime* (parse "42"))) [(oi-number 42)])))
