@@ -13,23 +13,20 @@
                  [org.clojure/core.match "0.3.0-alpha4"]
                  [instaparse "1.4.5"]]
 
-  :dev-dependencies []
-
-  :plugins [[lein-figwheel "0.5.10"]
-            [lein-cljsbuild "1.1.6" :exclusions [[org.clojure/clojure]]]
-            [lein-doo "0.1.7"]]
-
   :source-paths ["src"]
   :test-paths ["test"]
 
-  :doo {:paths {:karma "./node_modules/.bin/karma --reporters junit"}}
+  :clean-targets [:target-path "run/compiled"]
 
   :cljsbuild {:builds
-              [{:id "test"
+              [{:id           "karma"
                 :source-paths ["src" "test"]
-                :compiler {:output-to "resources/public/js/compiled/oi_lang_test.js"
-                           :main oi-lang.test-runner
-                           :optimizations :none}}
+                :compiler     {:output-to     "run/compiled/karma/test.js"
+                               :source-map    "run/compiled/karma/test.js.map"
+                               :output-dir    "run/compiled/karma/test"
+                               :main          "oi_lang.test_runner"
+                               :optimizations :whitespace
+                               :pretty-print  true}}
                {:id           "dev"
                 :source-paths ["src"]
 
@@ -100,18 +97,32 @@
              ;; :server-logfile false
              }
 
+  :npm {:devDependencies [[karma "1.0.0"]
+                          [karma-cljs-test "0.1.0"]
+                          [karma-chrome-launcher "0.2.0"]
+                          [karma-junit-reporter "0.3.8"]]}
+
+  ; "karma-cljs-test": "^0.1.0",
+  ;"karma": "^1.6.0",
+  ;"karma-phantomjs-launcher": "^1.0.4",
+  ;"karma-junit-reporter": "^1.2.0"
 
   ;; setting up nREPL for Figwheel and ClojureScript dev
   ;; Please see:
   ;; https://github.com/bhauman/lein-figwheel/wiki/Using-the-Figwheel-REPL-within-NRepl
-  :profiles {:dev {:dependencies  [[binaryage/devtools "0.9.4"]
+  :profiles {:dev {:dependencies  [[karma-reporter "2.1.2"]
+                                   [binaryage/devtools "0.9.4"]
                                    [figwheel-sidecar "0.5.10"]
                                    [com.cemerick/piggieback "0.2.1"]]
+                   :plugins       [[lein-ancient "0.6.10"]
+                                   [lein-npm "0.6.2"]
+                                   [lein-figwheel "0.5.10"]
+                                   [lein-cljsbuild "1.1.6" :exclusions [[org.clojure/clojure]]]]
                    ;; need to add dev source path here to get user.clj loaded
                    :source-paths  ["src" "dev"]
                    ;; for CIDER
                    ;; :plugins [[cider/cider-nrepl "0.12.0"]]
                    :repl-options  {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
                    ;; need to add the compliled assets to the :clean-targets
-                   :clean-targets ^{:protect false} ["resources/public/js/compiled"
-                                                     :target-path]}})
+                     }}
+  :aliases {"karma-once" ["do" "clean," "cljsbuild" "once" "karma,"]})

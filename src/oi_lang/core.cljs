@@ -4,12 +4,12 @@
 (enable-console-print!)
 
 (defn run [evt]
-  (let [code-input (-> js/document (.getElementById "code") .-value)
-        parse-tree (obj/parse code-input)
-        parse-tree-output (-> js/document (.getElementById "parse-tree"))
-        runtime-representation-output (-> js/document (.getElementById "runtime-representation"))
+  (let [code-input                      (-> js/document (.getElementById "code") .-value)
+        parse-tree                      (obj/parse code-input)
+        parse-tree-output               (-> js/document (.getElementById "parse-tree"))
+        runtime-representation-output   (-> js/document (.getElementById "runtime-representation"))
         evaluated-representation-output (-> js/document (.getElementById "evaluated"))
-        pretty-representation-output (.getElementById js/document "pretty-representation")]
+        pretty-representation-output    (.getElementById js/document "pretty-representation")]
     (if (seq? parse-tree)
       (set! (.-value parse-tree-output) parse-tree)
       (do
@@ -17,14 +17,15 @@
         (set! (.-value runtime-representation-output) "")
         (set! (.-value evaluated-representation-output) "")
         (set! (.-value pretty-representation-output) "")))
-    (let [runtime-representation (obj/ast->runtime* parse-tree)
-          _ (set! (.-value runtime-representation-output) runtime-representation)
+    (let [runtime-representation   (obj/ast->runtime* parse-tree)
+          _                        (set! (.-value runtime-representation-output) runtime-representation)
           evaluated-representation (obj/eval* runtime-representation)
-          _ (set! (.-value evaluated-representation-output) evaluated-representation)
-          pretty-representation (obj/pretty evaluated-representation)
-          _ (set! (.-value pretty-representation-output) pretty-representation)])))
+          _                        (set! (.-value evaluated-representation-output) evaluated-representation)
+          pretty-representation    (obj/pretty evaluated-representation)
+          _                        (set! (.-value pretty-representation-output) pretty-representation)])))
 
-(-> js/document
-    (.getElementById "code")
-    (.addEventListener "keyup" run))
+(defn main []
+  (-> js/document
+      (.getElementById "code")
+      (.addEventListener "keyup" run)))
 
