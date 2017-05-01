@@ -1,6 +1,7 @@
 version: 2
 jobs:
     build:
+        working_directory: /root/oi-lang
         docker:
             - image: lein
         steps:
