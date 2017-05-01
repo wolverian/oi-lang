@@ -1,10 +1,10 @@
 version: 2
-jobs:
-	build:
-		docker:
-			- image: lein
-		steps:
-			- checkout
-			- run: lein deps
-			- run: lein doo phantom test once
-		
+    jobs:
+        build:
+            docker:
+                - image: lein
+            steps:
+                - checkout
+                - run: lein deps
+                - run: lein doo phantom test once
+
