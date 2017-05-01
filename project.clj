@@ -97,15 +97,11 @@
              ;; :server-logfile false
              }
 
-  :npm {:devDependencies [[karma "1.0.0"]
-                          [karma-cljs-test "0.1.0"]
-                          [karma-chrome-launcher "0.2.0"]
-                          [karma-junit-reporter "0.3.8"]]}
-
-  ; "karma-cljs-test": "^0.1.0",
-  ;"karma": "^1.6.0",
-  ;"karma-phantomjs-launcher": "^1.0.4",
-  ;"karma-junit-reporter": "^1.2.0"
+  :npm {:devDependencies [[karma "1.6.0"]
+                          [karma-cljs-test "^0.1.0"]
+                          [karma-phantomjs-launcher "^1.0.4"]
+                          [karma-chrome-launcher "^2.0.0"]
+                          [karma-junit-reporter "^1.2.0"]]}
 
   ;; setting up nREPL for Figwheel and ClojureScript dev
   ;; Please see:
