@@ -5,7 +5,7 @@ jobs:
     docker:
       - image: node:latest
     steps:
-      - run: apt update && apt full-upgrade && apt install -y openjdk-7-jdk
+      - run: apt update && apt full-upgrade -y && apt install -y openjdk-7-jdk
       - run: cd /tmp && wget -q https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 && tar jxf phantomjs-2.1.1-linux-x86_64.tar.bz2
       - run: cd /tmp && wget -q https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein && chmod +x lein
       - checkout
