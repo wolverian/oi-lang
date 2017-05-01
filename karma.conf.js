@@ -4,7 +4,7 @@ module.exports = function (config) {
 
   config.set({
     frameworks: ['cljs-test'],
-    browsers: ['PhantomJS'],
+    browsers: ['Chrome', 'PhantomJS'],
     files: [
       root + '/../test.js', // same as :output-to
       {pattern: root + '/../oi_lang_test.js.map', included: false, watched: false},
