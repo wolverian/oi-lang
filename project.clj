@@ -22,6 +22,8 @@
   :source-paths ["src"]
   :test-paths ["test"]
 
+  :doo {:paths {:karma "./node_modules/.bin/karma --reporters junit"}}
+
   :cljsbuild {:builds
               [{:id "test"
                 :source-paths ["src" "test"]
