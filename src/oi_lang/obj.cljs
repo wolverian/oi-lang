@@ -68,19 +68,35 @@
   (and (= (:type a) (:type b))
        (= (:value a) (:value b))))
 
+(declare oi-boolean)
+
 (defn oi-object []
-  {:slots [] :proto nil})
+  (let [self {:slots {} :proto nil}]
+    (assoc self
+      :slots {"=" (fn [other]
+                    (and (= (:type self) (:type other))
+                         (= (:value self) (:value other))))})))
 
 (def initial (oi-object))
 
+(defn oi-list [& items]
+  {:type  :list
+   :value items
+   :slots {}
+   :proto initial})
+
+(def lobby {:type :object
+            :slots {"list" oi-list}
+            :proto initial})
+
 (def oi-false {:type  :boolean
                :value false
-               :slots []
+               :slots {}
                :proto initial})
 
 (def oi-true {:type  :boolean
               :value true
-              :slots []
+              :slots {}
               :proto initial})
 
 (defn oi-boolean [truthy]
@@ -93,12 +109,22 @@
                  (oi-boolean (< n value)))}
    :proto initial})
 
+(defn oi-string [s]
+  {:type  :string
+   :value s
+   :slots {}
+   :proto initial})
+
 (defn eval [expr]
   (match expr
     [:number n]
     (oi-number n)
+    [:string s]
+    (oi-string s)
     [:send target [:message name [:arglist & args]]]
-    (activate (-> (eval target) :slots (get name)) (map eval args))))
+    (activate (-> (eval target) :slots (get name)) (map eval args))
+    [:message name [:arglist & args]]
+    (activate (-> lobby :slots (get name)) (map eval args))))
 
 (defn eval* [exprs]
   (map eval exprs))
@@ -106,14 +132,19 @@
 (defn pretty [expr]
   (match expr
     {:type :number :value value} value
-    {:type :boolean :value value} value))
+    {:type :string :value value} (str \" value \")
+    {:type :boolean :value value} value
+    {:type :list :value values} (str "list(" (string/join ", " (map pretty values)) ")")))
 
 (defn pretty* [exprs]
   (string/join "\n" (map pretty exprs)))
 
-(deftest eval-tests
+(deftest simple-eval-tests
   (is (oi-= (eval* (parse "42")) [(oi-number 42)]))
   (is (oi-= (eval* (parse "42 < 22")) [oi-false]))
   (is (oi-= (eval* (parse "2<1")) [oi-false]))
   (is (oi-= (eval* (parse "1<2")) [oi-true]))
   (is (oi-= (eval* (parse "42 > 22")) [oi-true])))
+
+(deftest list-eval-tests
+  (is (oi-= (eval* (parse "list(1, 2, 3)")) [(oi-list (oi-number 1) (oi-number 2) (oi-number 3))])))
