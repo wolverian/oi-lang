@@ -134,18 +134,24 @@
     :slots {:args args}
     :proto initial}))
 
+(defn oi-send [target msg]
+  {:type :send
+   :slots {:target target
+           :message msg}
+   :proto initial})
+
 (defn ast->runtime [ast]
   (match ast
     [:number n]
     (oi-number n)
     [:string s]
     (oi-string s)
-    [:send target [:message name [:arglist & args]]]
-    (activate (-> (ast->runtime target) :slots (get name)) (map ast->runtime args))
+    [:send target msg]
+    (oi-send target (ast->runtime msg))
     [:message name]
     (oi-message name)
     [:message name [:arglist & args]]
-    (oi-message name args)))
+    (oi-message name (map ast->runtime args))))
 
 (defn ast->runtime* [exprs]
   (map ast->runtime exprs))
@@ -155,7 +161,9 @@
     {:type :number :value value} value
     {:type :string :value value} (str \" value \")
     {:type :boolean :value value} value
-    {:type :list :value values} (str "list(" (string/join ", " (map pretty values)) ")")))
+    {:type :list :value values} (str "list(" (string/join ", " (map pretty values)) ")")
+    {:type :message :value name :slots {:args args}} (str "message(" name ", " (string/join ", " (map pretty args)) ")")
+    {:type :message :value name :slots {}} (str "message(" name ")")))
 
 (defn pretty* [exprs]
   (string/join "\n" (map pretty exprs)))
