@@ -1,1 +1,10 @@
-test: lein doo phantom test once
+version: 2
+jobs:
+	build:
+		docker:
+			- image: lein
+	steps:
+		- checkout
+		- lein deps
+		- lein doo phantom test once
+		
