@@ -174,10 +174,10 @@
     {:type :number :value n} {:env env :result n}
     {:type :string :value s} {:env env :result (str \" s \")}
     {:type :boolean :value b} {:env env :result b}
-    {:type :message :value slot-name}
-    (activate env (lookup-slot env slot-name) [])
     {:type :message :value slot-name :slots {:args args}}
-    (activate env (lookup-slot (:slots env) slot-name) args)))
+    (activate env (lookup-slot env slot-name) args)
+    {:type :message :value slot-name}
+    (activate env (lookup-slot env slot-name) [])))
 
 (defn eval*
   ([env exprs] (:result (reduce eval {:env env :result nil} exprs)))

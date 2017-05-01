@@ -11,12 +11,12 @@
         runtime-representation (obj/ast->runtime* parse-tree)
         runtime-representation-output (-> js/document (.getElementById "runtime-representation"))
         _ (set! (.-value runtime-representation-output) runtime-representation)
-        pretty-representation (obj/pretty* runtime-representation)
-        pretty-representation-output (.getElementById js/document "pretty-representation")
-        _ (set! (.-value pretty-representation-output) pretty-representation)
         evaluated-representation (obj/eval* runtime-representation)
         evaluated-representation-output (-> js/document (.getElementById "evaluated"))
-        _ (set! (.-value evaluated-representation-output) evaluated-representation)]
+        _ (set! (.-value evaluated-representation-output) evaluated-representation)
+        pretty-representation (obj/pretty evaluated-representation)
+        pretty-representation-output (.getElementById js/document "pretty-representation")
+        _ (set! (.-value pretty-representation-output) pretty-representation)]
     ))
 
 (-> js/document
