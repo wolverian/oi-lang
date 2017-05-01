@@ -3,8 +3,8 @@ jobs:
 	build:
 		docker:
 			- image: lein
-	steps:
-		- checkout
-		- lein deps
-		- lein doo phantom test once
+		steps:
+			- checkout
+			- lein deps
+			- lein doo phantom test once
 		
