@@ -5,6 +5,6 @@ jobs:
 			- image: lein
 		steps:
 			- checkout
-			- lein deps
-			- lein doo phantom test once
+			- run: lein deps
+			- run: lein doo phantom test once
 		
