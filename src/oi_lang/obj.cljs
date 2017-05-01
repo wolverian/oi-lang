@@ -153,8 +153,15 @@
     [:message name [:arglist & args]]
     (oi-message name (map ast->runtime args))))
 
-(defn ast->runtime* [exprs]
-  (map ast->runtime exprs))
+(defn ast->runtime* [asts]
+  (map ast->runtime asts))
+
+(defn eval [expr]
+  (match expr
+    {:type :number :value n} n))
+
+(defn eval* [exprs]
+  (last (map eval exprs)))
 
 (defn pretty [expr]
   (match expr
