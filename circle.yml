@@ -5,6 +5,7 @@ jobs:
         docker:
             - image: clojure
         steps:
+            - run: apt install phantomjs
             - checkout
             - run: lein deps
             - run: lein doo phantom test once
