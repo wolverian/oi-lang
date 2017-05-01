@@ -156,12 +156,13 @@
 (defn ast->runtime* [asts]
   (map ast->runtime asts))
 
-(defn eval [expr]
+(defn eval [env expr]
   (match expr
-    {:type :number :value n} n))
+    {:type :number :value n} {:env env :result n}))
 
-(defn eval* [exprs]
-  (last (map eval exprs)))
+(defn eval*
+  ([env exprs] (:result (reduce eval {:env env :result nil} exprs)))
+  ([exprs] (eval* lobby exprs)))
 
 (defn pretty [expr]
   (match expr
