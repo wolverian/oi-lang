@@ -1,7 +1,6 @@
 (ns oi-lang.obj
   (:require [instaparse.core :as insta :refer-macros [defparser]]
             [cljs.core.match :refer-macros [match]]
-            [cljs.test :as test :refer [is] :refer-macros [deftest]]
             [clojure.string :as string]))
 
 (defparser oi-program
@@ -54,18 +53,6 @@
                      [:message "setSlot" (vec (cons :arglist (vec (cons target args))))]
                      [_ _] [:send target message]))}
     (oi-program source)))
-
-(deftest simple-parses
-  (is (= (parse "42") [[:number 42]]))
-  (is (= (parse "\"foo\"") [[:string "foo"]]))
-  (is (= (parse "bar") [[:message "bar"]]))
-  (is (= (parse "bar()") [[:message "bar" [:arglist]]]))
-  (is (= (parse "bar(1)") [[:message "bar" [:arglist [:number 1]]]]))
-  (is (= (parse "bar(1, 2)") [[:message "bar" [:arglist [:number 1] [:number 2]]]]))
-  (is (= (parse "bar(1, 2, 3)") [[:message "bar" [:arglist [:number 1] [:number 2] [:number 3]]]]))
-  (is (= (parse "foo bar") [[:send [:message "foo"] [:message "bar"]]]))
-  (is (= (parse "foo < bar") [[:send [:message "foo"] [:message "<" [:arglist [:message "bar"]]]]]))
-  (is (= (parse "x := 42") [[:message "setSlot" [:arglist [:message "x"] [:number 42]]]])))
 
 (defn activate [env target args]
   (if (fn? target)
@@ -233,17 +220,3 @@
 
 (defn pretty* [exprs]
   (string/join "\n" (map pretty exprs)))
-
-(deftest simple-ast->runtime*-tests
-  (is (oi-= (ast->runtime* (parse "42")) [(oi-number 42)]))
-  (is (oi-= (ast->runtime* (parse "42 < 22")) [oi-false]))
-  (is (oi-= (ast->runtime* (parse "2<1")) [oi-false]))
-  (is (oi-= (ast->runtime* (parse "1<2")) [oi-true]))
-  (is (oi-= (ast->runtime* (parse "42 > 22")) [oi-true])))
-
-(deftest list-ast->runtime*-tests
-  (is (oi-= (ast->runtime* (parse "list(1, 2, 3)")) [(oi-list (oi-number 1) (oi-number 2) (oi-number 3))]))
-  (is (oi-= (ast->runtime* (parse "x := list(1, 2, 3); x")) [(oi-list (oi-number 1) (oi-number 2) (oi-number 3))])))
-
-(deftest simple-eval-tests
-  (is (oi-= (eval* (ast->runtime* (parse "42"))) [(oi-number 42)])))

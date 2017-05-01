@@ -13,13 +13,22 @@
                  [org.clojure/core.match "0.3.0-alpha4"]
                  [instaparse "1.4.5"]]
 
+  :dev-dependencies []
+
   :plugins [[lein-figwheel "0.5.10"]
-            [lein-cljsbuild "1.1.6" :exclusions [[org.clojure/clojure]]]]
+            [lein-cljsbuild "1.1.6" :exclusions [[org.clojure/clojure]]]
+            [lein-doo "0.1.7"]]
 
   :source-paths ["src"]
+  :test-paths ["test"]
 
   :cljsbuild {:builds
-              [{:id           "dev"
+              [{:id "test"
+                :source-paths ["src" "test"]
+                :compiler {:output-to "resources/public/js/compiled/oi_lang_test.js"
+                           :main oi-lang.test-runner
+                           :optimizations :none}}
+               {:id           "dev"
                 :source-paths ["src"]
 
                 ;; the presence of a :figwheel configuration here
