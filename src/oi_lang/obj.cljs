@@ -67,14 +67,16 @@
   (is (= (parse "foo < bar") [[:send [:message "foo"] [:message "<" [:arglist [:message "bar"]]]]]))
   (is (= (parse "x := 42") [[:message "setSlot" [:arglist [:message "x"] [:number 42]]]])))
 
-(defn activate [value args]
-  (if (fn? value)
-    (apply value args)
-    (throw (str "unsupported activation: " (or value "nil") " " (or args "nil")))))
+(defn activate [env target args]
+  (if (fn? target)
+    {:env env :result (apply target args)}
+    (throw (str "unsupported activation: " (or target "nil") " " (or args "nil")))))
 
 (defn oi-= [a b]
-  (and (= (:type a) (:type b))
-       (= (:value a) (:value b))))
+  (if (and (vector? a) (vector? b))
+    (every? oi-= (map vec a b))
+    (and (= (:type a) (:type b))
+         (= (:value a) (:value b)))))
 
 (declare oi-boolean)
 
@@ -158,14 +160,25 @@
     (oi-message name (map ast->runtime args))))
 
 (defn ast->runtime* [asts]
-  (map ast->runtime asts))
+  (vec (map ast->runtime asts)))
 
-(defn eval [env expr]
+(defn lookup-slot [obj slot-name]
+  (when (nil? obj)
+    (throw (str "slot not found: " slot-name)))
+  (if (contains? (:slots obj) slot-name)
+    (get (:slots obj) slot-name)
+    (lookup-slot (:proto obj) slot-name)))
+
+(defn eval [{env :env} expr]
+  (println "(eval" (keys (:slots env)) expr ")")
   (match expr
     {:type :number :value n} {:env env :result n}
     {:type :string :value s} {:env env :result (str \" s \")}
     {:type :boolean :value b} {:env env :result b}
-    {:type :send :slots {:target target :message message}}))
+    {:type :message :value slot-name}
+    (activate env (lookup-slot env slot-name) [])
+    {:type :message :value slot-name :slots {:args args}}
+    (activate env (lookup-slot (:slots env) slot-name) args)))
 
 (defn eval*
   ([env exprs] (:result (reduce eval {:env env :result nil} exprs)))
