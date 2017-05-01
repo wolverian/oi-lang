@@ -1,0 +1,16 @@
+{
+  "name": "oi-lang",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "karma-cljs-test": "^0.1.0",
+    "karma": "^1.6.0",
+    "karma-phantomjs-launcher": "^1.0.4",
+    "karma-junit-reporter": "^1.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wolverian/oi-lang.git"
+  }
+}
