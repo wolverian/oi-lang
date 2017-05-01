@@ -90,6 +90,8 @@
 
 (def initial (oi-object))
 
+(declare eval do-activations)
+
 (defn oi-list [& items]
   {:type  :list
    :value items
@@ -97,7 +99,9 @@
    :proto initial})
 
 (def lobby {:type  :object
-            :slots {"list" oi-list}
+            :slots {"list" (fn [& items]
+                             (println "list" items)
+                             (apply oi-list (map (fn [item] (:result (do-activations lobby item))) items)))}
             :proto initial})
 
 (def oi-false {:type  :boolean
@@ -170,7 +174,28 @@
     (get (:slots obj) slot-name)
     (lookup-slot (:proto obj) slot-name)))
 
+(defn do-activations [env expr]
+  (match expr
+    {:type :send :slots {:target target :message {:type :message :value slot-name :slots {:args args}}}}
+    (do
+      (println "send" target slot-name args)
+      (activate target (lookup-slot target slot-name) args))
+    {:type :send :slots {:target target :message {:type :message :value slot-name}}}
+    (do
+      (println "send-without-args" target slot-name)
+      (activate target (lookup-slot target slot-name) []))
+    {:type :message :value slot-name :slots {:args args}}
+    (do
+      (println "message" slot-name args)
+      (activate env (lookup-slot env slot-name) args))
+    {:type :message :value slot-name}
+    (do
+      (println "message-without-args" slot-name)
+      (activate env (lookup-slot env slot-name) []))
+    _ {:env env :result expr}))
+
 (defn eval [{env :env} expr]
+  (.warn js/console "eval" expr)
   (match expr
     {:type :number :value n} {:env env :result n}
     {:type :string :value s} {:env env :result (str \" s \")}
@@ -197,6 +222,7 @@
   ([exprs] (eval* lobby exprs)))
 
 (defn pretty [expr]
+  (println "pretty" expr)
   (match expr
     {:type :number :value value} value
     {:type :string :value value} (str \" value \")
