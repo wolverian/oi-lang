@@ -116,8 +116,9 @@
 (defn oi-number [n]
   {:type  :number
    :value n
-   :slots {"<" (fn [{:keys [value]}]
-                 (oi-boolean (< n value)))}
+   :slots {"<" (fn [param]
+                 (println n "<" param)
+                 (oi-boolean (< n (:value param))))}
    :proto initial})
 
 (defn oi-string [s]
@@ -135,7 +136,7 @@
   ([name args]
    {:type  :message
     :value name
-    :slots {:args args}
+    :slots {:args (vec args)}
     :proto initial}))
 
 (defn oi-send [target msg]
@@ -153,7 +154,7 @@
     [:boolean b]
     (oi-boolean (= b "true"))
     [:send target msg]
-    (oi-send target (ast->runtime msg))
+    (oi-send (ast->runtime target) (ast->runtime msg))
     [:message name]
     (oi-message name)
     [:message name [:arglist & args]]
@@ -174,10 +175,22 @@
     {:type :number :value n} {:env env :result n}
     {:type :string :value s} {:env env :result (str \" s \")}
     {:type :boolean :value b} {:env env :result b}
+    {:type :send :slots {:target target :message {:type :message :value slot-name :slots {:args args}}}}
+    (do
+      (println "send" target slot-name args)
+      (activate target (lookup-slot target slot-name) args))
+    {:type :send :slots {:target target :message {:type :message :value slot-name}}}
+    (do
+      (println "send-without-args" target slot-name)
+      (activate target (lookup-slot target slot-name) []))
     {:type :message :value slot-name :slots {:args args}}
-    (activate env (lookup-slot env slot-name) args)
+    (do
+      (println "message" slot-name args)
+      (activate env (lookup-slot env slot-name) args))
     {:type :message :value slot-name}
-    (activate env (lookup-slot env slot-name) [])))
+    (do
+      (println "message-without-args" slot-name)
+      (activate env (lookup-slot env slot-name) []))))
 
 (defn eval*
   ([env exprs] (:result (reduce eval {:env env :result nil} exprs)))
