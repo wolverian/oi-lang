@@ -170,7 +170,6 @@
     (lookup-slot (:proto obj) slot-name)))
 
 (defn eval [{env :env} expr]
-  (println "(eval" (keys (:slots env)) expr ")")
   (match expr
     {:type :number :value n} {:env env :result n}
     {:type :string :value s} {:env env :result (str \" s \")}
