@@ -7,12 +7,14 @@
 (defparser oi-program
   "<start> = (terminator | exp)*
    <exp> = literal / send / message
-   <literal> = number / string
+   <literal> = number / string / boolean
 
    number = #'[0-9]+'
 
    string = <'\"'> str-char* <'\"'>
    <str-char> = #'[^\"]'
+
+   boolean = 'true' | 'false'
 
    <identifier> = #'[a-zA-Z_]\\w*'
 
@@ -46,11 +48,11 @@
      :arglist    reduce-arglist
      :op-message (fn [op exp]
                    [:message op [:arglist exp]])
-     :send (fn [target message]
-             (match [target message]
-               [target [:message ":=" [:arglist & args]]]
-               [:message "setSlot" (vec (cons :arglist (vec (cons target args))))]
-               [_ _] [:send target message]))}
+     :send       (fn [target message]
+                   (match [target message]
+                     [target [:message ":=" [:arglist & args]]]
+                     [:message "setSlot" (vec (cons :arglist (vec (cons target args))))]
+                     [_ _] [:send target message]))}
     (oi-program source)))
 
 (deftest simple-parses
@@ -79,9 +81,9 @@
 (defn oi-object []
   (let [self {:slots {} :proto nil}]
     (assoc self
-      :slots {"=" (fn [other]
-                    (and (= (:type self) (:type other))
-                         (= (:value self) (:value other))))
+      :slots {"="       (fn [other]
+                          (and (= (:type self) (:type other))
+                               (= (:value self) (:value other))))
               "setSlot" (fn [value] (throw "NEEDS MUTABLE STUFF"))})))
 
 (def initial (oi-object))
@@ -92,7 +94,7 @@
    :slots {}
    :proto initial})
 
-(def lobby {:type :object
+(def lobby {:type  :object
             :slots {"list" oi-list}
             :proto initial})
 
@@ -124,19 +126,19 @@
 
 (defn oi-message
   ([name]
-   {:type :message
+   {:type  :message
     :value name
     :slots {}
     :proto initial})
   ([name args]
-   {:type :message
+   {:type  :message
     :value name
     :slots {:args args}
     :proto initial}))
 
 (defn oi-send [target msg]
-  {:type :send
-   :slots {:target target
+  {:type  :send
+   :slots {:target  target
            :message msg}
    :proto initial})
 
@@ -146,6 +148,8 @@
     (oi-number n)
     [:string s]
     (oi-string s)
+    [:boolean b]
+    (oi-boolean (= b "true"))
     [:send target msg]
     (oi-send target (ast->runtime msg))
     [:message name]
@@ -157,8 +161,11 @@
   (map ast->runtime asts))
 
 (defn eval [env expr]
+  (println "(eval" expr ")")
   (match expr
-    {:type :number :value n} {:env env :result n}))
+    {:type :number :value n} {:env env :result n}
+    {:type :string :value s} {:env env :result (str \" s \")}
+    {:type :boolean :value b} {:env env :result b}))
 
 (defn eval*
   ([env exprs] (:result (reduce eval {:env env :result nil} exprs)))
