@@ -29,7 +29,7 @@
    send = exp <' '+> message
         | exp <' '*> op-message
 
-   <terminator> = <'\n'> | <';'>
+   <terminator> = <' '*> <'\n'> <' '*> | <' '*> <';'> <' '*>
    ")
 
 (defn reduce-arglist [& params]
