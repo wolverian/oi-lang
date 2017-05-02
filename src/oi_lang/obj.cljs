@@ -184,9 +184,9 @@
 (defn eval [{env :env} expr]
   (.warn js/console "eval" expr)
   (match expr
-    {:type :number :value n} {:env env :result n}
+    {:type :number :value n} {:env env :result expr}
     {:type :string :value s} {:env env :result (str \" s \")}
-    {:type :boolean :value b} {:env env :result b}
+    {:type :boolean :value b} {:env env :result expr}
     {:type :send :slots {:target target :message {:type :message :value slot-name :slots {:args args}}}}
     (do
       (println "send" target slot-name args)
