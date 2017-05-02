@@ -6,6 +6,9 @@ jobs:
       - image: node:latest
     steps:
       - run:
+          name: Add backports
+          command: echo 'deb http://ftp.debian.org/debian jessie-backports main' >> /etc/apt/sources.list.d/backports.list
+      - run:
           name: Upgrade platform
           command: apt update && apt full-upgrade -y
       - run:
