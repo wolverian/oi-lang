@@ -7,7 +7,7 @@ module.exports = function (config) {
     browsers: ['Chrome', 'PhantomJS'],
     files: [
       root + '/../test.js', // same as :output-to
-      {pattern: root + '/../oi_lang_test.js.map', included: false, watched: false},
+      {pattern: root + '/../test.js.map', included: false, watched: false},
       {pattern: root + '/**/*.+(cljs|cljc|clj|js|js.map)', included: false, watched: false}
     ],
 

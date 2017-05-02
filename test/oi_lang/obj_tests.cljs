@@ -26,4 +26,4 @@
   (is (oi/oi-= (oi/ast->runtime* (oi/parse "x := list(1, 2, 3); x")) [(oi/oi-list (oi/oi-number 1) (oi/oi-number 2) (oi/oi-number 3))])))
 
 (deftest simple-eval-tests
-  (is (oi/oi-= (oi/eval* (oi/ast->runtime* (oi/parse "42"))) [(oi/oi-number 42)])))
+  (is (oi/oi-= (oi/eval* (oi/ast->runtime* (oi/parse "42"))) (oi/oi-number 42))))

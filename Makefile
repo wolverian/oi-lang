@@ -9,7 +9,7 @@ default:
 
 .PHONY: dev
 dev:
-	lein figwheel
+	rlwrap lein figwheel
 
 .PHONY: clean
 clean:
