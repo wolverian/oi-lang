@@ -7,3 +7,4 @@ test:
   override:
     - lein karma-once
     - karma start --single-run --reporters junit,dots
+    - lein kibit
