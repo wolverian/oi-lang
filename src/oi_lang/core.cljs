@@ -3,13 +3,16 @@
 
 (enable-console-print!)
 
+(defn elem-by-id [id]
+  (.getElementById js/document id))
+
 (defn run [evt]
-  (let [code-input                      (.getElementById js/document "code" .-value)
+  (let [code-input                      (.-value (elem-by-id "code"))
         parse-tree                      (obj/parse code-input)
-        parse-tree-output               (.getElementById js/document "parse-tree")
-        runtime-representation-output   (.getElementById js/document "runtime-representation")
-        evaluated-representation-output (.getElementById js/document "evaluated")
-        pretty-representation-output    (.getElementById js/document "pretty-representation")]
+        parse-tree-output               (elem-by-id "parse-tree")
+        runtime-representation-output   (elem-by-id "runtime-representation")
+        evaluated-representation-output (elem-by-id "evaluated")
+        pretty-representation-output    (elem-by-id "pretty-representation")]
     (if (seq? parse-tree)
       (set! (.-value parse-tree-output) parse-tree)
       (do
@@ -25,7 +28,5 @@
           _                        (set! (.-value pretty-representation-output) pretty-representation)])))
 
 (defn main []
-  (-> js/document
-      (.getElementById "code")
-      (.addEventListener "keyup" run)))
+  (.addEventListener (elem-by-id "code") "keyup" run))
 
