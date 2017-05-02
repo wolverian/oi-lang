@@ -7,23 +7,37 @@
 </head>
 <body>
 <div id="app">
-    <label for="code">Oi code</label>
-    <textarea id="code" placeholder='Examples: 1<2, list(1, 2, "foo", 42<2)' autofocus></textarea>
+    <h1>Oi the language</h1>
 
-    <label for="pretty-representation">Result</label>
-    <textarea id="pretty-representation"></textarea>
+    <p>Hello and welcome! Oi is a smol proggin language. It doesn't understand much yet, so please be gentle.</p>
 
-    <p>The stuff below shows what happens between the two boxes above! Wow!</p>
+    <section>
+        <label for="code">Oi code</label>
+        <textarea id="code" placeholder='Examples: 1<2, list(1, 2, "foo", 42<2)' autofocus></textarea>
+    </section>
 
-    <label for="parse-tree">Parse tree</label>
-    <textarea id="parse-tree"></textarea>
+    <section>
+        <label for="pretty-representation">Result</label>
+        <textarea id="pretty-representation" disabled></textarea>
+    </section>
 
-    <label for="runtime-representation">Runtime tree</label>
-    <textarea id="runtime-representation"></textarea>
+    <h2>Internals</h2>
+    <p>The boxes below show the various stages the parser and evaluator go through. It's kinda interesting! Click on a title of a box to view that box.</p>
 
-    <label for="evaluated">Evaluated result</label>
-    <textarea id="evaluated"></textarea>
+    <section>
+        <label for="parse-tree">Parse tree</label>
+        <textarea id="parse-tree" disabled></textarea>
+    </section>
 
+    <section>
+        <label for="runtime-representation">Runtime tree</label>
+        <textarea id="runtime-representation" disabled></textarea>
+    </section>
+
+    <section>
+        <label for="evaluated">Evaluated result</label>
+        <textarea id="evaluated" disabled></textarea>
+    </section>
 </div>
 <script src="js/compiled/oi_lang.js" type="text/javascript"></script>
 </body>

@@ -1,25 +1,31 @@
 * { box-sizing: border-box; }
-html, body, #app { height: 100%; margin: 0; padding: 0; }
+/*html, body, #app { height: 100%; margin: 0; padding: 0; }*/
 #app {
   border: 20px solid white;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: stretch;
 }
 body,
 textarea
 { font-size: 18px; font-family: -system, sans-serif; }
+h1{font-size:36px; margin: 0;padding:0}
+section{
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin-bottom: 20px;
+}
+
 textarea {
   font-family: 'Fira Code', 'Fira Mono', monospace;
   flex-grow: 2;
-  margin-left: 0;
-  margin-right: 0;
-  margin-bottom: 20px;
-  margin-top: 0;
+  margin: 0;
   border: none;
   background-color: aliceblue;
   padding: 8px;
+  height: 100px;
 }
 #code {
 }
@@ -30,3 +36,4 @@ label{
   background-color: aliceblue;
   padding: 8px;
 }
+

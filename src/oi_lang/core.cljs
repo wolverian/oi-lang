@@ -6,6 +6,10 @@
 (defn elem-by-id [id]
   (.getElementById js/document id))
 
+(defn elem-by-selector [selector]
+  (println "elem-by-selector" selector)
+  (.querySelector js/document selector))
+
 (defn run [evt]
   (let [code-input                      (.-value (elem-by-id "code"))
         parse-tree                      (obj/parse code-input)
@@ -27,5 +31,21 @@
           pretty-representation    (obj/pretty evaluated-representation)
           _                        (set! (.-value pretty-representation-output) pretty-representation)])))
 
-(if-let [code-input (elem-by-id "code")]
-  (.addEventListener code-input "keyup" run))
+(defn find-panel [label]
+  (.-nextElementSibling label))
+
+(defn toggle-panel [panel]
+  (let [current (-> panel .-style .-display)]
+    (set! (-> panel .-style .-display)
+          (if (= current "none")
+            "block"
+            "none"))))
+
+(when-let [code-input (elem-by-id "code")]
+  (.addEventListener code-input "keyup" run)
+  (doseq [elem ["code" "parse-tree" "runtime-representation" "evaluated" "pretty-representation"]]
+    (let [label (elem-by-selector (str "label[for='" elem "']"))]
+      (.addEventListener label "click" (fn [evt]
+                                         (.preventDefault evt)
+                                         (.stopPropagation evt)
+                                         (toggle-panel (find-panel (.-target evt))))))))
