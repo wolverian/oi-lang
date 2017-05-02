@@ -4,11 +4,11 @@
 (enable-console-print!)
 
 (defn run [evt]
-  (let [code-input                      (-> js/document (.getElementById "code") .-value)
+  (let [code-input                      (.getElementById js/document "code" .-value)
         parse-tree                      (obj/parse code-input)
-        parse-tree-output               (-> js/document (.getElementById "parse-tree"))
-        runtime-representation-output   (-> js/document (.getElementById "runtime-representation"))
-        evaluated-representation-output (-> js/document (.getElementById "evaluated"))
+        parse-tree-output               (.getElementById js/document "parse-tree")
+        runtime-representation-output   (.getElementById js/document "runtime-representation")
+        evaluated-representation-output (.getElementById js/document "evaluated")
         pretty-representation-output    (.getElementById js/document "pretty-representation")]
     (if (seq? parse-tree)
       (set! (.-value parse-tree-output) parse-tree)
