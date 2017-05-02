@@ -1,11 +1,13 @@
-.PHONY: default
-default:
+.PHONY: usage
+usage:
+	@echo
 	@echo Usage:
-	@echo make dev	- Automatic development build
-	@echo make prod	- Production build
-	@echo make test	- Run tests
-	@echo make lint	- Check code quality	
-	@echo make deploy	- Deploy
+	@echo "	make dev	- Automatic development build"
+	@echo "	make prod	- Production build"
+	@echo "	make test	- Run tests"
+	@echo "	make lint	- Check code quality"
+	@echo "	make deploy	- Deploy"
+	@echo
 
 .PHONY: dev
 dev:

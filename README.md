@@ -6,4 +6,6 @@ oi is a smol programming language.
 
 ## Development
 
-Check out the [Makefile](Makefile).
+Run `make dev` to run everything. It'll eventually open a browser with the testing UI in it for you.
+
+Run `make` to see all the development commands, or read the  [Makefile](Makefile) yourself.
