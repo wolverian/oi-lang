@@ -87,7 +87,6 @@
 
 (def lobby {:type  :object
             :slots {"list" (fn [& items]
-                             (println "list" items)
                              (apply oi-list (map (fn [item] (:result (do-activations lobby item))) items)))}
             :proto initial})
 
@@ -108,7 +107,6 @@
   {:type  :number
    :value n
    :slots {"<" (fn [param]
-                 (println n "<" param)
                  (oi-boolean (< n (:value param))))}
    :proto initial})
 
@@ -164,52 +162,34 @@
 (defn do-activations [env expr]
   (match expr
     {:type :send :slots {:target target :message {:type :message :value slot-name :slots {:args args}}}}
-    (do
-      (println "send" target slot-name args)
-      (activate target (lookup-slot target slot-name) args))
+    (activate target (lookup-slot target slot-name) args)
     {:type :send :slots {:target target :message {:type :message :value slot-name}}}
-    (do
-      (println "send-without-args" target slot-name)
-      (activate target (lookup-slot target slot-name) []))
+    (activate target (lookup-slot target slot-name) [])
     {:type :message :value slot-name :slots {:args args}}
-    (do
-      (println "message" slot-name args)
-      (activate env (lookup-slot env slot-name) args))
+    (activate env (lookup-slot env slot-name) args)
     {:type :message :value slot-name}
-    (do
-      (println "message-without-args" slot-name)
-      (activate env (lookup-slot env slot-name) []))
+    (activate env (lookup-slot env slot-name) [])
     _ {:env env :result expr}))
 
 (defn eval [{env :env} expr]
-  (.warn js/console "eval" expr)
   (match expr
     {:type :number :value n} {:env env :result expr}
     {:type :string :value s} {:env env :result (str \" s \")}
     {:type :boolean :value b} {:env env :result expr}
     {:type :send :slots {:target target :message {:type :message :value slot-name :slots {:args args}}}}
-    (do
-      (println "send" target slot-name args)
-      (activate target (lookup-slot target slot-name) args))
+    (activate target (lookup-slot target slot-name) args)
     {:type :send :slots {:target target :message {:type :message :value slot-name}}}
-    (do
-      (println "send-without-args" target slot-name)
-      (activate target (lookup-slot target slot-name) []))
+    (activate target (lookup-slot target slot-name) [])
     {:type :message :value slot-name :slots {:args args}}
-    (do
-      (println "message" slot-name args)
-      (activate env (lookup-slot env slot-name) args))
+    (activate env (lookup-slot env slot-name) args)
     {:type :message :value slot-name}
-    (do
-      (println "message-without-args" slot-name)
-      (activate env (lookup-slot env slot-name) []))))
+    (activate env (lookup-slot env slot-name) [])))
 
 (defn eval*
   ([env exprs] (:result (reduce eval {:env env :result nil} exprs)))
   ([exprs] (eval* lobby exprs)))
 
 (defn pretty [expr]
-  (println "pretty" expr)
   (match expr
     nil ""
     {:type :number :value value} value

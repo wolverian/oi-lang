@@ -7,7 +7,6 @@
   (.getElementById js/document id))
 
 (defn elem-by-selector [selector]
-  (println "elem-by-selector" selector)
   (.querySelector js/document selector))
 
 (defn run [evt]
