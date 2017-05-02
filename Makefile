@@ -30,4 +30,5 @@ lint:
 
 .PHONY: deploy
 deploy: prod
-	now --static --public --name oi-lang resources/public/
+	now resources/public/
+	now alias
