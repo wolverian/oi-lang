@@ -5,12 +5,27 @@ jobs:
     docker:
       - image: node:latest
     steps:
-      - run: apt update && apt full-upgrade -y && apt install -y openjdk-7-jdk
-      - run: wget -q https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein && chmod +x lein
+      - run:
+          name: Upgrade platform
+          command: apt update && apt full-upgrade -y
+      - run:
+          name: Install package dependencies
+          command: apt install -y openjdk-7-jdk
+      - run:
+          name: Install Leiningen
+          command: |
+            wget -q https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
+            chmod +x lein
       - checkout
-      - run: npm install karma-cli -g
-      - run: env PATH=.:$PATH make test
-      - run: env PATH=.:$PATH make lint
+      - run:
+          name: Install karma
+          command: npm install karma-cli -g
+      - run:
+          name: Tests
+          command: env PATH=.:$PATH make test
+      - run:
+          name: Lint
+          command: env PATH=.:$PATH make lint
       - store_test_results:
           path: run/compiled/karma/test/junit/karma
 
