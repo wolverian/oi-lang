@@ -211,6 +211,7 @@
 (defn pretty [expr]
   (println "pretty" expr)
   (match expr
+    nil ""
     {:type :number :value value} value
     {:type :string :value value} (str \" value \")
     {:type :boolean :value value} value

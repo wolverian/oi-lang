@@ -11,8 +11,12 @@ default:
 dev:
 	lein figwheel
 
+.PHONY: clean
+clean:
+	lein clean
+
 .PHONY: prod
-prod:
+prod: clean
 	lein cljsbuild once production
 
 .PHONY: test

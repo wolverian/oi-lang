@@ -1,6 +1,7 @@
 * { box-sizing: border-box; }
-html, body, #app { height: 100%; margin: 0; padding: 0 }
+html, body, #app { height: 100%; margin: 0; padding: 0; }
 #app {
+  border: 20px solid white;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -10,9 +11,22 @@ body,
 textarea
 { font-size: 18px; font-family: -system, sans-serif; }
 textarea {
-  font-family: 'Fira Code', monospace;
+  font-family: 'Fira Code', 'Fira Mono', monospace;
   flex-grow: 2;
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 20px;
+  margin-top: 0;
+  border: none;
+  background-color: aliceblue;
+  padding: 8px;
 }
 #code {
 }
-
+#pretty-representation {
+  font-weight: 600;
+}
+label{
+  background-color: aliceblue;
+  padding: 8px;
+}
