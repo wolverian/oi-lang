@@ -11,6 +11,7 @@ body,
 textarea
 { font-size: 18px; font-family: -system, sans-serif; }
 h1{font-size:36px; margin: 0;padding:0}
+h2{margin:0}
 section{
   display: flex;
   flex-direction: column;
@@ -35,5 +36,19 @@ textarea {
 label{
   background-color: aliceblue;
   padding: 8px;
+}
+
+@media screen and (min-width: 1200px) {
+  #app {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .column {
+    margin: 8px;
+    flex-basis: 50%;
+  }
+  textarea {
+    height: 150px;
+  }
 }
 
