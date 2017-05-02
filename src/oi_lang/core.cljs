@@ -27,6 +27,5 @@
           pretty-representation    (obj/pretty evaluated-representation)
           _                        (set! (.-value pretty-representation-output) pretty-representation)])))
 
-(defn -main []
-  (.addEventListener (elem-by-id "code") "keyup" run))
-
+(if-let [code-input (elem-by-id "code")]
+  (.addEventListener code-input "keyup" run))

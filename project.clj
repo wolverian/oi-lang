@@ -16,8 +16,6 @@
   :source-paths ["src"]
   :test-paths ["test"]
 
-  :clean-targets [:target-path "run/compiled"]
-
   :cljsbuild {:builds
               [{:id           "karma"
                 :source-paths ["src" "test"]
@@ -106,20 +104,22 @@
   ;; setting up nREPL for Figwheel and ClojureScript dev
   ;; Please see:
   ;; https://github.com/bhauman/lein-figwheel/wiki/Using-the-Figwheel-REPL-within-NRepl
-  :profiles {:dev {:dependencies  [[karma-reporter "2.1.2"]
-                                   [binaryage/devtools "0.9.4"]
-                                   [figwheel-sidecar "0.5.10"]
-                                   [com.cemerick/piggieback "0.2.1"]]
-                   :plugins       [[lein-ancient "0.6.10"]
-                                   [lein-kibit "0.1.3"]
-                                   [lein-npm "0.6.2"]
-                                   [lein-figwheel "0.5.10"]
-                                   [lein-cljsbuild "1.1.6" :exclusions [[org.clojure/clojure]]]]
-                   ;; need to add dev source path here to get user.clj loaded
-                   :source-paths  ["src" "dev"]
-                   ;; for CIDER
-                   ;; :plugins [[cider/cider-nrepl "0.12.0"]]
-                   :repl-options  {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
-                   ;; need to add the compliled assets to the :clean-targets
-                     }}
+  :profiles {:dev        {:dependencies [[karma-reporter "2.1.2"]
+                                         [binaryage/devtools "0.9.4"]
+                                         [figwheel-sidecar "0.5.10"]
+                                         [com.cemerick/piggieback "0.2.1"]]
+                          :plugins      [[lein-ancient "0.6.10"]
+                                         [lein-kibit "0.1.3"]
+                                         [lein-npm "0.6.2"]
+                                         [lein-figwheel "0.5.10"]
+                                         [lein-cljsbuild "1.1.6" :exclusions [[org.clojure/clojure]]]]
+                          ;; need to add dev source path here to get user.clj loaded
+                          :source-paths ["src" "dev"]
+                          ;; for CIDER
+                          ;; :plugins [[cider/cider-nrepl "0.12.0"]]
+                          :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
+                          ;; need to add the compliled assets to the :clean-targets
+                          }
+             :production {:source-paths ["src"]}}
+  :clean-targets ^{:protect false} ["resources/public/js" "run" :target-path]
   :aliases {"karma-once" ["do" "clean," "cljsbuild" "once" "karma,"]})
