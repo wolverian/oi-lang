@@ -89,6 +89,11 @@ h1 {
   color: deeppink;
 }
 
+a {
+  text-decoration: none;
+  color: deeppink;
+}
+
 nav {
   margin-left: 16px;
 }
@@ -100,4 +105,8 @@ nav a {
   border-radius: 4px;
   color: darkblue;
   font-size: 16px;
+}
+
+nav a.here {
+  background-color: cornsilk;
 }
