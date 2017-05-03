@@ -1,8 +1,8 @@
 (defproject oi-lang "0.1.0-SNAPSHOT"
-  :description "FIXME: write this!"
-  :url "http://example.com/FIXME"
-  :license {:name "Eclipse Public License"
-            :url  "http://www.eclipse.org/legal/epl-v10.html"}
+  :description "A small programming language"
+  :url "https://oi-lang.now.sh"
+  :license {:name "ISC"
+            :url  "http://www.isc.org/downloads/software-support-policy/isc-license/"}
 
   :min-lein-version "2.7.1"
 

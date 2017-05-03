@@ -10,4 +10,8 @@ Run `make dev` to run everything. It'll eventually open a browser with the testi
 
 Run `make karma-auto` in another window to run tests whenever you change anything.
 
-Run `make` to see all the development commands, or read the  [Makefile](Makefile) yourself.
+Run `make` to see all the development commands, or read the [Makefile](Makefile) yourself.
+
+## License
+
+ISC (see [LICENSE](LICENSE).)
