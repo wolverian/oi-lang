@@ -136,18 +136,12 @@
 
 (defn ast->runtime [ast]
   (match ast
-    [:number n]
-    (oi-number n)
-    [:string s]
-    (oi-string s)
-    [:boolean b]
-    (oi-boolean (= b "true"))
-    [:send target msg]
-    (oi-send (ast->runtime target) (ast->runtime msg))
-    [:message name]
-    (oi-message name)
-    [:message name [:arglist & args]]
-    (oi-message name (map ast->runtime args))))
+    [:number n] (oi-number n)
+    [:string s] (oi-string s)
+    [:boolean b] (oi-boolean (= b "true"))
+    [:send target msg] (oi-send (ast->runtime target) (ast->runtime msg))
+    [:message name] (oi-message name)
+    [:message name [:arglist & args]] (oi-message name (map ast->runtime args))))
 
 (defn ast->runtime* [asts]
   (vec (map ast->runtime asts)))
