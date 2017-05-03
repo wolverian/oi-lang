@@ -8,4 +8,6 @@ oi is a smol programming language.
 
 Run `make dev` to run everything. It'll eventually open a browser with the testing UI in it for you.
 
+Run `make karma-auto` in another window to run tests whenever you change anything.
+
 Run `make` to see all the development commands, or read the  [Makefile](Makefile) yourself.
