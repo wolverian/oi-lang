@@ -7,7 +7,7 @@ usage:
 	@echo "	make test	- Run tests once"
 	@echo "	make test-auto	- Run tests automatically"
 	@echo "	make lint	- Check code quality"
-	@echo "	make deploy	- Deploy"
+	@echo "	make deploy-site	- Deploy the site"
 	@echo
 
 .PHONY: dev
@@ -39,7 +39,7 @@ test-auto:
 lint:
 	lein kibit
 
-.PHONY: deploy
-deploy: prod
+.PHONY: deploy-site
+deploy-site: prod
 	now --name oi-lang resources/public/
 	now alias
