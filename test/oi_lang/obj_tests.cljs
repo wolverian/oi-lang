@@ -27,4 +27,5 @@
 
 (deftest simple-eval-tests
   (is (oi/oi-= (oi/eval* (oi/ast->runtime* (oi/parse "42"))) (oi/oi-number 42)))
-  (is (oi/oi-= (oi/eval* (oi/ast->runtime* (oi/parse "list(1, 2, 3); 42"))) (oi/oi-number 42))))
+  (is (oi/oi-= (oi/eval* (oi/ast->runtime* (oi/parse "list(1, 2, 3); 42"))) (oi/oi-number 42)))
+  (is (oi/oi-= (oi/eval* (oi/ast->runtime* (oi/parse "list(1, 2, 3); 2<42"))) oi/oi-true)))
