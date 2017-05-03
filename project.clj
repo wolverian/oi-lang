@@ -122,4 +122,5 @@
                           }
              :production {:source-paths ["src"]}}
   :clean-targets ^{:protect false} ["resources/public/js" "run" :target-path]
-  :aliases {"karma-once" ["do" "clean," "cljsbuild" "once" "karma,"]})
+  :aliases {"karma-once" ["do" "clean," "cljsbuild" "once" "karma,"]
+            "karma-auto" ["cljsbuild" "auto" "karma"]})

@@ -4,7 +4,8 @@ usage:
 	@echo Usage:
 	@echo "	make dev	- Automatic development build"
 	@echo "	make prod	- Production build"
-	@echo "	make test	- Run tests"
+	@echo "	make test	- Run tests once"
+	@echo "	make test-auto	- Run tests automatically"
 	@echo "	make lint	- Check code quality"
 	@echo "	make deploy	- Deploy"
 	@echo
@@ -25,6 +26,14 @@ prod: clean
 test:
 	lein karma-once
 	karma start --single-run --reporters junit,dots
+
+.PHONY: test-auto
+test-auto:
+	lein karma-once # this is needed so that the files are there when karma starts watching them
+	tmux new-session -d \
+		'karma start' \; \
+		split-window -h 'lein karma-auto' \; \
+		attach
 
 .PHONY: lint
 lint:
