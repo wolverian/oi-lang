@@ -1,25 +1,36 @@
-* { box-sizing: border-box; }
-/*html, body, #app { height: 100%; margin: 0; padding: 0; }*/
+* {
+  box-sizing: border-box;
+}
+
+html, body, #app { height: 100%; margin: 0; padding: 0; }
 #app {
   border: 20px solid white;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: stretch;
+  flex-wrap: wrap;
 }
-body,
-textarea
-{
-  font-size: 18px;
+
+#app > * {
+  width: 600px;
+}
+
+body {
   font-family: -apple-system, -system, sans-serif;
+}
+
+body,
+textarea {
+  font-size: 18px;
   line-height: 24px;
 }
 
-h2{
+h2 {
   margin: 0;
   margin-bottom: 8px;
 }
-section{
+
+section {
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -35,27 +46,30 @@ textarea {
   padding: 8px;
   height: 100px;
 }
+
+.example {
+  height: 150px;
+}
+
+code {
+  font-family: 'Fira Code', 'Fira Mono', monospace;
+}
+
 #code {
 }
+
 #pretty-representation {
   font-weight: 600;
 }
-label{
+
+label {
   background-color: hsl(48, 100%, 95%);
   padding: 8px;
 }
 
-@media screen and (min-width: 1200px) {
+@media screen and (max-width: 1200px) {
   #app {
     flex-direction: row;
-    align-items: flex-start;
-  }
-  .column {
-    margin: 8px;
-    flex-basis: 50%;
-  }
-  textarea {
-    height: 150px;
   }
 }
 
@@ -65,10 +79,10 @@ header {
   margin-bottom: 8px;
 }
 
-h1{
-  font-size:36px;
+h1 {
+  font-size: 36px;
   margin: 0;
-  padding:0;
+  padding: 0;
   display: inline;
   line-height: 36px;
   color: deeppink;

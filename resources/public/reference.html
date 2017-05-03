@@ -8,14 +8,66 @@
 </head>
 <body>
 <div id="app">
-    <div class="column">
-        <header>
-            <h1>Oi the reference</h1>
-            <nav>
-                <a href="/">About</a>
-            </nav>
-        </header>
-    </div>
+    <header>
+        <h1>Oi the reference</h1>
+        <nav>
+            <a href="/">About</a>
+        </nav>
+    </header>
+
+    <p>This page is a reference to the things Oi understands <em>right now</em>.</p>
+
+    <h2>Syntax</h2>
+
+    <p>Oi's syntax is pretty simple! Everything is an expression, expressions all return values, and every expression
+        looks something like this:</p>
+
+    <section>
+        <label for="expressions">Expressions</label>
+
+        <textarea class="example" id="expressions">
+42              # or "foo" or list(1, 2, 3)
+42 toString     # if there are no arguments no parens needed!
+42 plus(2)      # use parens to give arguments
+42 < 2          # operators are a bit special
+        </textarea>
+    </section>
+
+    <p>And that's it!
+        <small>Although that operator syntax is not really syntax, but rather sugar on top of it. 🎂</small>
+    </p>
+
+    <p>There's a subtlety here that I skipped over: even something like <code>42</code> or <code>list</code> is actually
+        a method call to an implicit context object. It's all method calls, all the way down! 🐢</p>
+
+    <h2>Simple types</h2>
+
+    <p>Oi understands <b>integers</b>, <b>strings</b> and <b>booleans</b>.</p>
+
+    <section>
+        <label for="simple-type-examples">Simple type examples</label>
+
+        <textarea class="example" id="simple-type-examples">
+42
+true
+false
+"What is the purpose of life?"
+        </textarea>
+    </section>
+
+    <h2>More types</h2>
+
+    <p>Oi understands <b>lists</b> and <b>method calls</b> (but not definitions).</p>
+
+    <section>
+        <label for="more-type-examples">Simple type examples</label>
+
+        <textarea class="example" id="more-type-examples">
+list
+list()
+list(1, "foo", list(2, "bar"), list)
+        </textarea>
+    </section>
 </div>
 </body>
 </html>
