@@ -59,14 +59,22 @@
     {:env env :result (apply target args)}
     (throw (str "unsupported activation: " (or target "nil") " " (or args "nil")))))
 
+(defn lookup-slot [obj slot-name]
+  (when (nil? obj)
+    (throw (str "slot not found: " slot-name)))
+  (if (contains? (:slots obj) slot-name)
+    (get (:slots obj) slot-name)
+    (lookup-slot (:proto obj) slot-name)))
+
 (defn oi-= [a b]
   (if (and (vector? a) (vector? b))
     (every? (fn [[a b]] (oi-= a b)) (map vector a b))
-    (and (= (:type a) (:type b))
-         (= (:value a) (:value b)))))
+    (let [eq (lookup-slot a "=")]
+      (eq b))))
 
 (declare oi-boolean)
 
+; todo: this can't work, self isn't what we need here
 (defn oi-object []
   (let [self {:slots {} :proto nil}]
     (assoc self
@@ -82,7 +90,13 @@
 (defn oi-list [& items]
   {:type  :list
    :value items
-   :slots {}
+   :slots {"=" (fn [other-list]
+                 (println "list=" items other-list)
+                 (and (= (:type other-list) :list)
+                      (every? (fn ([[a b]]
+                                   (let [eq (lookup-slot a "=")]
+                                     (eq b))))
+                              (map vector items (:value other-list)))))}
    :proto initial})
 
 (def lobby {:type  :object
@@ -145,13 +159,6 @@
 
 (defn ast->runtime* [asts]
   (vec (map ast->runtime asts)))
-
-(defn lookup-slot [obj slot-name]
-  (when (nil? obj)
-    (throw (str "slot not found: " slot-name)))
-  (if (contains? (:slots obj) slot-name)
-    (get (:slots obj) slot-name)
-    (lookup-slot (:proto obj) slot-name)))
 
 (defn do-activations [env expr]
   (match expr
