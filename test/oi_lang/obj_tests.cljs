@@ -21,7 +21,7 @@
   (is (oi/oi-= (string->result* "42 < 22") oi/oi-false))
   (is (oi/oi-= (string->result* "2<1") oi/oi-false))
   (is (oi/oi-= (string->result* "1<2") oi/oi-true))
-  (is (oi/oi-= (string->result* "42 > 22") oi/oi-true))
+  (is (oi/oi-= (string->result* "42 < 22") oi/oi-false))
   (is (oi/oi-= (string->result* "42") (oi/oi-number 42)))
   (is (oi/oi-= (string->result* "list(1, 2, 3); 42") (oi/oi-number 42)))
   (is (oi/oi-= (string->result* "list(1, 2, 3); 2<42") oi/oi-true))
