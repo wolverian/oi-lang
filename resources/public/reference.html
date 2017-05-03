@@ -9,54 +9,13 @@
 <body>
 <div id="app">
     <div class="column">
-        <h1>Oi the language</h1>
-
-        <p>Hello and welcome! Oi is a smol proggin language that runs in your browser. You shouldn't use Oi for anything, at least yet, except for having fun!</p>
-
-        <p>Oi's idea is to be as simple as possible and still support objects. Oi is kind of old-fashioned in that sense! Everything in Oi is an object. The basic types like numbers, strings and booleans are all objects. So are methods and even method calls!</p>
-
-        <p>Oi doesn't understand much yet, so please be gentle. 😣 There isn't a reference yet, sorry about that. Oi is mostly modelled after <a href="http://iolanguage.org">io language</a>, so you can get an idea of what Oi is like from reading the <a href="http://iolanguage.org/guide/guide.html">io language guide</a>.</p>
-
-        <p>If you display is wide enough, you can view some things side-by-side. Try it!</p>
-
-        <p>Below you can write Oi code and see how it evaluates. 🤗</p>
-
-        <section>
-            <label for="code">Your Oi code</label>
-            <textarea id="code" placeholder='Examples: 1<2; list(1, 2, "foo", 42<2)' autofocus></textarea>
-        </section>
-
-        <section>
-            <label for="pretty-representation">Result</label>
-            <textarea id="pretty-representation" disabled></textarea>
-        </section>
-    </div>
-
-    <div class="column">
-        <h2>Internals</h2>
-
-        <p>Test status: <a href="https://circleci.com/gh/wolverian/oi-lang" target="_blank"><img src="https://circleci.com/gh/wolverian/oi-lang.svg?style=svg" alt="Test status"></a></p>
-
-        <p>The boxes below show the various stages the parser and evaluator go through. It's kinda interesting! Click on a title of a box to toggle that box.</p>
-
-        <p>If you're interested in how Oi works, check out the <a href="https://github.com/wolverian/oi-lang">source code on GitHub</a>!</p>
-
-        <section>
-            <label for="parse-tree">Parse tree</label>
-            <textarea id="parse-tree" disabled></textarea>
-        </section>
-
-        <section>
-            <label for="runtime-representation">Runtime representation</label>
-            <textarea id="runtime-representation" disabled></textarea>
-        </section>
-
-        <section>
-            <label for="evaluated">Evaluated representation</label>
-            <textarea id="evaluated" disabled></textarea>
-        </section>
+        <header>
+            <h1>Oi the reference</h1>
+            <nav>
+                <a href="/">About</a>
+            </nav>
+        </header>
     </div>
 </div>
-<script src="js/compiled/oi_lang.js" type="text/javascript"></script>
 </body>
 </html>

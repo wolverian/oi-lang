@@ -9,9 +9,16 @@
 }
 body,
 textarea
-{ font-size: 18px; font-family: -system, sans-serif; }
-h1{font-size:36px; margin: 0;padding:0}
-h2{margin:0}
+{
+  font-size: 18px;
+  font-family: -apple-system, -system, sans-serif;
+  line-height: 24px;
+}
+
+h2{
+  margin: 0;
+  margin-bottom: 8px;
+}
 section{
   display: flex;
   flex-direction: column;
@@ -24,7 +31,7 @@ textarea {
   flex-grow: 2;
   margin: 0;
   border: none;
-  background-color: aliceblue;
+  background-color: hsl(48, 100%, 95%);
   padding: 8px;
   height: 100px;
 }
@@ -34,7 +41,7 @@ textarea {
   font-weight: 600;
 }
 label{
-  background-color: aliceblue;
+  background-color: hsl(48, 100%, 95%);
   padding: 8px;
 }
 
@@ -52,3 +59,30 @@ label{
   }
 }
 
+header {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+h1{
+  font-size:36px;
+  margin: 0;
+  padding:0;
+  display: inline;
+  line-height: 36px;
+  color: deeppink;
+}
+
+nav {
+  margin-left: 16px;
+}
+
+nav a {
+  text-decoration: none;
+  background-color: aliceblue;
+  padding: 8px;
+  border-radius: 4px;
+  color: darkblue;
+  font-size: 16px;
+}
