@@ -61,7 +61,7 @@
 
 (defn oi-= [a b]
   (if (and (vector? a) (vector? b))
-    (every? oi-= (map vec a b))
+    (every? (fn [[a b]] (oi-= a b)) (map vector a b))
     (and (= (:type a) (:type b))
          (= (:value a) (:value b)))))
 
