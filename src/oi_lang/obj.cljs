@@ -54,10 +54,10 @@
                      [_ _] [:send target message]))}
     (oi-program source)))
 
-(defn activate [env target args]
-  (if (fn? target)
-    {:env env :result (apply target args)}
-    (throw (str "unsupported activation: " (or target "nil") " " (or args "nil")))))
+(defn activate [env receiver slot args]
+  (if (fn? slot)
+    {:env env :result (apply slot receiver args)}
+    (throw (str "unsupported activation: " (or slot "nil") " " (or args "nil")))))
 
 (defn lookup-slot [obj slot-name]
   (when (nil? obj)
@@ -66,22 +66,16 @@
     (get (:slots obj) slot-name)
     (lookup-slot (:proto obj) slot-name)))
 
-(defn oi-= [a b]
-  (if (and (vector? a) (vector? b))
-    (every? (fn [[a b]] (oi-= a b)) (map vector a b))
-    (let [eq (lookup-slot a "=")]
-      (eq b))))
-
 (declare oi-boolean)
 
-; todo: this can't work, self isn't what we need here
 (defn oi-object []
-  (let [self {:slots {} :proto nil}]
-    (assoc self
-      :slots {"="       (fn [other]
-                          (and (= (:type self) (:type other))
-                               (= (:value self) (:value other))))
-              "setSlot" (fn [value] (throw "NEEDS MUTABLE STUFF"))})))
+  {:slots {"="       (fn [self other]
+                       (println "=type" (:type self) (:type other))
+                       (println "=value" (:value self) (:value other))
+                       (and (= (:type self) (:type other))
+                            (= (:value self) (:value other))))
+           "setSlot" (fn [value] (throw (js/Error. "NEEDS MUTABLE STUFF")))}
+   :proto nil})
 
 (def initial (oi-object))
 
@@ -90,7 +84,7 @@
 (defn oi-list [& items]
   {:type  :list
    :value items
-   :slots {"=" (fn [other-list]
+   :slots {"=" (fn [self other-list]
                  (println "list=" items other-list)
                  (and (= (:type other-list) :list)
                       (every? (fn ([[a b]]
@@ -100,7 +94,7 @@
    :proto initial})
 
 (def lobby {:type  :object
-            :slots {"list" (fn [& items]
+            :slots {"list" (fn [self & items]
                              (apply oi-list (map (fn [item] (:result (do-activations lobby item))) items)))}
             :proto initial})
 
@@ -120,7 +114,7 @@
 (defn oi-number [n]
   {:type  :number
    :value n
-   :slots {"<" (fn [param]
+   :slots {"<" (fn [self param]
                  (oi-boolean (< n (:value param))))}
    :proto initial})
 
@@ -163,28 +157,29 @@
 (defn do-activations [env expr]
   (match expr
     {:type :send :slots {:target target :message {:type :message :value slot-name :slots {:args args}}}}
-    (activate target (lookup-slot target slot-name) args)
+    (activate env target (lookup-slot target slot-name) args)
     {:type :send :slots {:target target :message {:type :message :value slot-name}}}
-    (activate target (lookup-slot target slot-name) [])
+    (activate env target (lookup-slot target slot-name) [])
     {:type :message :value slot-name :slots {:args args}}
-    (activate env (lookup-slot env slot-name) args)
+    (activate env env (lookup-slot env slot-name) args)
     {:type :message :value slot-name}
-    (activate env (lookup-slot env slot-name) [])
+    (activate env env (lookup-slot env slot-name) [])
     _ {:env env :result expr}))
 
+; TODO: I'm pretty sure we want to not call activate here, and only in do-activations
 (defn eval [{env :env} expr]
   (match expr
     {:type :number :value n} {:env env :result expr}
     {:type :string :value s} {:env env :result (str \" s \")}
     {:type :boolean :value b} {:env env :result expr}
     {:type :send :slots {:target target :message {:type :message :value slot-name :slots {:args args}}}}
-    (activate target (lookup-slot target slot-name) args)
+    (activate env target (lookup-slot target slot-name) args)
     {:type :send :slots {:target target :message {:type :message :value slot-name}}}
-    (activate target (lookup-slot target slot-name) [])
+    (activate env target (lookup-slot target slot-name) [])
     {:type :message :value slot-name :slots {:args args}}
-    (activate env (lookup-slot env slot-name) args)
+    (activate env env (lookup-slot env slot-name) args)
     {:type :message :value slot-name}
-    (activate env (lookup-slot env slot-name) [])))
+    (activate env env (lookup-slot env slot-name) [])))
 
 (defn eval*
   ([env exprs] (:result (reduce eval {:env env :result nil} exprs)))
