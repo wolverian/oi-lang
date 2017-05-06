@@ -2,12 +2,12 @@
 usage:
 	@echo
 	@echo Usage:
-	@echo "	make dev	- Automatic development build"
-	@echo "	make prod	- Production build"
-	@echo "	make test	- Run tests once"
-	@echo "	make test-auto	- Run tests automatically"
-	@echo "	make lint	- Check code quality"
-	@echo "	make deploy-site	- Deploy the site"
+	@echo "	make dev         - Automatic development build"
+	@echo "	make prod        - Production build"
+	@echo "	make test        - Run tests once"
+	@echo "	make test-auto   - Run tests automatically"
+	@echo "	make lint        - Check code quality"
+	@echo "	make deploy-site - Deploy the site"
 	@echo
 
 .PHONY: dev
