@@ -43,6 +43,71 @@
 
         <p>It'd be best if we could implement as much as possible of the standard library in Oi itself. Some way to load Oi code is needed, then. On that note, there's no way to run an Oi file yet either!</p>
     </div>
+
+    <div>
+        <h2>More detailed specification work</h2>
+
+        <p>The following is initial thinking and understanding on how Oi works.</p>
+
+        <ol>
+            <li><a href="#anatomy">The anatomy of a method call</a></li>
+            <li><a href="#evaluation">Evaluation</a></li>
+        </ol>
+    </div>
+
+    <div>
+
+        <h2 id="anatomy">The anatomy of a method call</h2>
+
+        <p>
+            At runtime, we have a call object like:
+        </p>
+
+        <section>
+            <label for="call">The anatomy of a call</label>
+
+            <textarea id="call" class="example">
+call(
+    environment,
+    receiver,
+    message(slotName, arguments...)
+)</textarea>
+        </section>
+
+        <p>For an example, here's how it plays out when we call the <code>list</code> method on the implicit lobby object when we're at the top in the REPL (imagining we have a REPL for a moment):</p>
+
+        <section>
+            <label for="call-list">Calling <code>list(1, 2, 3)</code></label>
+
+            <textarea id="call-list" class="example">
+call(
+    lobby,  # at the top level we're inside lobby
+    lobby,  # list is a method on lobby
+    message("list", 1, 2, 3)
+)
+            </textarea>
+        </section>
+
+        <p>Note that to avoid circularity we used varargs to give the arguments to <code>message</code> instead of a single <code>list</code>.</p>
+    </div>
+
+    <div>
+        <p>Next, Oi finds the "list" slot on <code>lobby</code> and activates it. In the case of <code>list</code>, the slot is a native function, so Oi just calls that function directly.</p>
+
+        <h2 id="evaluation">Evaluation</h2>
+
+        <p>When evaluating code, the Oi interpreter works on objects. Every item being interpreted is an object. In this sense, interpretation Oi is straightforward. The important question is what happens when we have a method call. When do we perform the call? What if the call is in argument position?</p>
+
+        <p>Oi currently performs method calls in argument position before passing them into the method. This will change so that every method can choose: if a method body doesn't mention an argument directly, calls in that argument are not performed unless the method body asks for them to be performed via the <code>arguments</code> object available to the method body. Concretely, this enables us to write control structures as regular functions:</p>
+
+        <section>
+            <label for="control-structures">Control structures</label>
+
+            <textarea id="control-structures">
+if(x isDangerous, x launchMissiles, "do nothing")
+            </textarea>
+        </section>
+    </div>
 </div>
 </body>
 </html>
