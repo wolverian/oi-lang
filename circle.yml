@@ -9,6 +9,8 @@ jobs:
       - run:
           name: Install Leiningen
           command: |
+            mkdir -p $HOME/bin
+            cd $HOME/bin
             wget -q https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
             chmod +x lein
       - checkout
@@ -17,10 +19,10 @@ jobs:
           command: npm install karma-cli -g
       - run:
           name: Tests
-          command: env PATH=..:$PATH make test
+          command: env PATH=$HOME/bin:$PATH make test
       - run:
           name: Lint
-          command: env PATH=..:$PATH make lint
+          command: env PATH=$HOME/bin:$PATH make lint
       - store_test_results:
           path: run/compiled/karma/test/junit/karma
 
