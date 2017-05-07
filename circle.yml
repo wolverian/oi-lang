@@ -13,7 +13,7 @@ jobs:
           name: Install Leiningen
           command: |
             mkdir -p /root/bin
-            cd root/bin
+            cd /root/bin
             wget -q https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
             chmod +x lein
       - save_cache:
