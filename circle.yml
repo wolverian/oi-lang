@@ -23,12 +23,6 @@ jobs:
       - run:
           name: Dependencies
           command: env PATH=$HOME/bin:$PATH lein deps
-      - save_cache:
-          key: deps-{{ .Branch }}-{{ checksum "project.clj" }}
-          paths:
-            - "node_modules"
-            - "~/.m2"
-            - "~/.lein"
       - run:
           name: Tests
           command: env PATH=$HOME/bin:$PATH make test
