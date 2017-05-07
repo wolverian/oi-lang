@@ -1,6 +1,6 @@
 module.exports = function (config) {
   var root = 'run/compiled/karma/test'; // same as :output-dir
-  var junitOutputDir = (process.env.CIRCLE_TEST_REPORTS + '/junit') || (root + '/junit')
+  var junitOutputDir = 'test-results/'
 
   config.set({
     frameworks: ['cljs-test'],

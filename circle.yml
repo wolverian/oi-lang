@@ -28,5 +28,5 @@ jobs:
           name: Lint
           command: env PATH=$HOME/bin:$PATH make lint
       - store_test_results:
-          path: run/compiled/karma/test/junit/karma
+          path: test-results/
 
