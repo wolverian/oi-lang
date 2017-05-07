@@ -30,7 +30,7 @@ jobs:
           name: Lint
           command: env PATH=$HOME/bin:$PATH make lint
       - save_cache:
-          key: deps-{{ .Branch }}-{{ checksum "project.clj" }}
+          key: deps-{{ .Branch }}-{{ checksum "project.clj" }}-{{ checksum "/root/bin/lein" }}
           paths:
             - "node_modules"
             - "~/.m2"
