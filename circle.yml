@@ -17,6 +17,9 @@ jobs:
           name: Install karma
           command: npm install karma-cli -g
       - run:
+          name: Dependencies
+          command: env PATH=$HOME/bin:$PATH lein deps
+      - run:
           name: Tests
           command: env PATH=$HOME/bin:$PATH make test
       - run:
