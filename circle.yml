@@ -4,7 +4,6 @@ jobs:
     working_directory: /home/oi/oi-lang
     docker:
       - image: wolverian/oi-lang
-        user: oi
     steps:
       - run:
           name: Install Leiningen
@@ -16,7 +15,7 @@ jobs:
       - checkout
       - run:
           name: Install karma
-          command: sudo npm install karma-cli -g
+          command: npm install karma-cli -g
       - run:
           name: Tests
           command: env PATH=$HOME/bin:$PATH make test
