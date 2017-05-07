@@ -7,8 +7,6 @@ jobs:
         environment: 
           LEIN_ROOT: 1
     steps:
-      - restore_cache:
-          key: deps-{{ .Branch }}-{{ checksum "/root/bin/lein" }}
       - run:
           name: Install Leiningen
           command: |
@@ -16,10 +14,6 @@ jobs:
             cd /root/bin
             wget -q https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
             chmod +x lein
-      - save_cache:
-          key: deps-{{ .Branch }}-{{ checksum "/root/bin/lein" }}
-          paths:
-            - "/root/bin/lein"
       - run:
           name: Install karma
           command: npm install karma-cli -g
@@ -34,6 +28,7 @@ jobs:
           paths:
             - "node_modules"
             - "~/.m2"
+            - "~/.lein"
       - run:
           name: Tests
           command: env PATH=$HOME/bin:$PATH make test
