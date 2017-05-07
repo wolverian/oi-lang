@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /home/oi/oi-lang
     docker:
-      - image: wolverian/oi-lang
+      - image: wolverian/oi-lang:latest
     steps:
       - run:
           name: Install Leiningen
