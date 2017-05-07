@@ -4,6 +4,8 @@ jobs:
     working_directory: /home/oi/oi-lang
     docker:
       - image: wolverian/oi-lang:0.0.1
+        environment: 
+          LEIN_ROOT: 1
     steps:
       - run:
           name: Install Leiningen
