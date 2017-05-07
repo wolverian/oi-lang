@@ -16,7 +16,7 @@ jobs:
       - checkout
       - run:
           name: Install karma
-          command: npm install karma-cli -g
+          command: sudo npm install karma-cli -g
       - run:
           name: Tests
           command: env PATH=$HOME/bin:$PATH make test
